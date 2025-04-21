@@ -5,7 +5,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from employees import views
 from employees.views import health_check
 from employees.views import EmployeeExportCSVAPIView, EmployeeExportExcelAPIView, EmployeeChartDataAPIView
 
@@ -50,5 +49,5 @@ urlpatterns = [
     # URL for exporting employee data to Excel
     path('api/employees/export/excel/', EmployeeExportExcelAPIView.as_view(), name='export_employees_excel'),
 
-    path('employees/employee-chart/', views.employee_chart, name='employee_chart'),  # Add this line
+    path('api/employees/chart/data/', EmployeeChartDataAPIView.as_view(), name='employee_chart_data'),
 ]

@@ -1,7 +1,6 @@
 import csv
 import openpyxl
 from django.http import HttpResponse
-import requests
 from rest_framework import generics
 from django.shortcuts import render
 from .models import Employee
@@ -22,15 +21,7 @@ def health_check(request):
     return JsonResponse({"status": "OK"})
 
 def employee_chart(request):
-    # Fetch the employee chart data from the API
-    response = requests.get('http://127.0.0.1:8000/api/employees/chart/data/')
-    
-    if response.status_code == 200:
-        data = response.json()  # Get the data from the response
-    else:
-        data = {}
-
-    return render(request, 'employees/employee_chart.html', {'data': data})
+    return render(request, 'employees/employee_chart.html')  # Ensure the correct template path
 
 class EmployeeListCreateAPIView(generics.ListCreateAPIView):
     queryset = Employee.objects.all()
