@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Department Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Employee Distribution by Department</h1>
+    <canvas id="employeeChart" width="400" height="200"></canvas>
+
+    <script>
+        // Fetch data for the chart from the template context
+        const data = JSON.parse('{{ data|safe }}');  // Parse the JSON string into a JavaScript object
+        
+        const ctx = document.getElementById('employeeChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',  // Change to 'pie' or 'line' if you want different chart types
+            data: {
+                labels: Object.keys(data),  // Departments
+                datasets: [{
+                    label: 'Number of Employees',
+                    data: Object.values(data),  // Count of employees per department
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
