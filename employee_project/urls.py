@@ -49,5 +49,6 @@ urlpatterns = [
     # URL for exporting employee data to Excel
     path('api/employees/export/excel/', EmployeeExportExcelAPIView.as_view(), name='export_employees_excel'),
 
-    path('api/employees/chart/data/', EmployeeChartDataAPIView.as_view(), name='employee_chart_data'),
+    path('api/employees/', include('employees.urls')),
+
 ]

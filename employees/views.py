@@ -15,6 +15,7 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from collections import Counter
+from rest_framework.permissions import AllowAny
 
 # Health check view (moved outside the class)
 def health_check(request):
@@ -92,6 +93,7 @@ class EmployeeExportExcelAPIView(generics.GenericAPIView):
         return response
     
 class EmployeeChartDataAPIView(APIView):
+    permission_classes = [AllowAny]  # <-- Add this line
     def get(self, request, *args, **kwargs):
         # Fetch all employee data
         employees = Employee.objects.all()

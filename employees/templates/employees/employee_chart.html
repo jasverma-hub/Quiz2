@@ -3,38 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Department Chart</title>
+    <title>Employee Charts</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Employee Distribution by Department</h1>
-    <canvas id="employeeChart" width="400" height="200"></canvas>
+
+    <!-- 1st Chart: Bar Chart -->
+    <canvas id="barChart" width="400" height="200"></canvas>
+
+    <!-- 2nd Chart: Pie Chart -->
+    <canvas id="pieChart" width="400" height="200" style="margin-top: 50px;"></canvas>
 
     <script>
-        // Fetch data for the chart from the template context
-        const data = JSON.parse('{{ data|safe }}');  // Parse the JSON string into a JavaScript object
-        
-        const ctx = document.getElementById('employeeChart').getContext('2d');
-        const chart = new Chart(ctx, {
-            type: 'bar',  // Change to 'pie' or 'line' if you want different chart types
-            data: {
-                labels: Object.keys(data),  // Departments
-                datasets: [{
-                    label: 'Number of Employees',
-                    data: Object.values(data),  // Count of employees per department
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        // Fetch data from the API
+        fetch('/api/employees/chart/data/')
+            .then(response => response.json())
+            .then(data => {
+                const labels = Object.keys(data);
+                const values = Object.values(data);
+
+                // Bar Chart
+                const barCtx = document.getElementById('barChart').getContext('2d');
+                new Chart(barCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Number of Employees',
+                            data: values,
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
                     }
-                }
-            }
-        });
+                });
+
+                // Pie Chart
+                const pieCtx = document.getElementById('pieChart').getContext('2d');
+                new Chart(pieCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Employee Distribution',
+                            data: values,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.6)',
+                                'rgba(54, 162, 235, 0.6)',
+                                'rgba(255, 206, 86, 0.6)',
+                                'rgba(75, 192, 192, 0.6)',
+                                'rgba(153, 102, 255, 0.6)',
+                                'rgba(255, 159, 64, 0.6)'
+                            ],
+                            borderColor: 'rgba(255, 255, 255, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'top' },
+                            title: { display: true, text: 'Employee Distribution (Pie Chart)' }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
     </script>
 </body>
 </html>
